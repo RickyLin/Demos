@@ -2,27 +2,31 @@
 using System.Linq;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace ConsoleApplication
+namespace MathForKids
 {
     public class Program
     {
         public static void Main(string[] args)
         {
             CommandLineApplication app = new CommandLineApplication();
-            app.HelpOption("--help|-h|-?");
-            app.VersionOption("--version|-v", "1.0.0"); //为了简化起见，直接返回静态的 1.0.0
+            app.HelpOption("--help|-h|-?"); // 使其支持显示帮助信息
+            app.VersionOption("--version|-v", "1.0.0"); // 使其支持显示版本信息。为了简化起见，直接返回静态的 1.0.0
 
+            // 添加 argument，这里我们允许传入这个 argument 的多个值。
             CommandArgument argOperator = app.Argument("operator", "算式类型，有效值：加、减、乘、除，可以设置多个类型", multipleValues: true);
 
+            // 添加多个 options，注意设置全写和简写的方式，很简单。这应该是基于约定的解析处理方式。
             CommandOption optMin = app.Option("--minValue -min <value>", "最小值，默认为0", CommandOptionType.SingleValue);
             CommandOption optMax = app.Option("--maxValue -max <value>", "最大值，默认为100", CommandOptionType.SingleValue);
             CommandOption optCount = app.Option("--count -c <value>", "生成的算式数量，默认为10", CommandOptionType.SingleValue);
 
+            // 传入一个委托方法，当下面的 Execute 执行后会执行我们的委托方法，完成我们需要处理的工作。 委托方法需要返回一个 int，反映执行结果，一如经典的控制台程序需要的那样。
             app.OnExecute(() =>
             {
                 return OnAppExecute(argOperator, optMin, optMax, optCount);
             });
 
+            // 开始执行，把控制台传入的参数直接传递给 CommandLineApplication。
             app.Execute(args);
         }
 
