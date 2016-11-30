@@ -78,11 +78,11 @@ namespace ConsoleAppAndDI
 
             // 验证所有 MySingleton 的实例都指向内存里同一个对象
             IEnumerable<MySingleton> singletons = thread1SingletonBag.Concat(thread2SingletonBag);
-            Console.WriteLine($"{singletons.Count()} objects are IDENTICAL? {singletons.AreIdentical()}");
+            Console.WriteLine($"Singleton: {singletons.Count()} objects are IDENTICAL? {singletons.AreIdentical()}");
 
             // 验证所有 MyTransient 的实例都各不相同
             IEnumerable<MyTransient> transients = thread1TransientBag.Concat(thread2TransientBag);
-            Console.WriteLine($"{transients.Count()} objects are DIFFERENT? {transients.AreDifferent()}");
+            Console.WriteLine($"Transient: {transients.Count()} objects are DIFFERENT? {transients.AreDifferent()}");
 
             // 对于Scoped生命周期，每个线程集合内的实例应该指向内存里同一个对象，而2个线程集合里的实例应该是不同的。
             Console.WriteLine($"collection of thread 1 has {thread1ScopedBag.Count} objects and they are IDENTICAL: {thread1ScopedBag.AreIdentical()}");
